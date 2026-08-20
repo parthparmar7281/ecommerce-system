@@ -6,6 +6,7 @@ import { placeOrder, getEffectivePrice, type ShippingDetails } from "../services
 import type { PaymentMethod } from "../types/order";
 import { toast } from "react-hot-toast";
 import "./checkout.css";
+import { createPaymentIntent } from "../services/paymentService";
 
 const Checkout: React.FC = () => {
     const { cart, subtotal, loadCart } = useCart();
@@ -55,7 +56,14 @@ const Checkout: React.FC = () => {
                 paymentMethod,
                 cartItems: cart,
             });
-
+            if (paymentMethod === "stripe") {
+                const clientSecret = await createPaymentIntent(order.id);
+                // Pass clientSecret to Stripe Elements or store it for payment confirmation
+                console.log("clientSecret:", clientSecret);
+                // e.g. navigate to a payment page with the secret
+                navigate("/payment", { state: { clientSecret, orderId: order.id } });
+                return;
+            }
             toast.success("Order placed successfully!");
             setPlacedOrder({ id: order.id, total_amount: order.total_amount });
             // Reload cart so global state clears
@@ -208,15 +216,15 @@ const Checkout: React.FC = () => {
                             </label>
 
                             <label
-                                className={`payment-option-card ${paymentMethod === "card" ? "selected" : ""}`}
-                                onClick={() => setPaymentMethod("card")}
+                                className={`payment-option-card ${paymentMethod === "stripe" ? "selected" : ""}`}
+                                onClick={() => setPaymentMethod("stripe")}
                             >
                                 <input
                                     type="radio"
                                     name="payment"
-                                    value="card"
-                                    checked={paymentMethod === "card"}
-                                    onChange={() => setPaymentMethod("card")}
+                                    value="stripe"
+                                    checked={paymentMethod === "stripe"}
+                                    onChange={() => setPaymentMethod("stripe")}
                                 />
                                 <div className="payment-option-info">
                                     <h4>Online Card / Instant Payment (Mock)</h4>

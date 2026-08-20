@@ -1,6 +1,6 @@
 export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
 export type PaymentStatus = 'pending' | 'paid' | 'failed';
-export type PaymentMethod = 'cod' | 'card' | 'stripe';
+export type PaymentMethod = 'cod' | 'stripe';
 
 export interface OrderItem {
     id: number;

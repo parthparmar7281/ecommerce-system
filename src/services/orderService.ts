@@ -65,7 +65,7 @@ export const placeOrder = async ({
             buyer_id: user.id,
             total_amount: totalAmount,
             status: "pending",
-            payment_status: paymentMethod === "cod" ? "pending" : "paid",
+            payment_status: "pending" ,
             payment_method: paymentMethod,
             shipping_name: shippingDetails.name,
             shipping_phone: shippingDetails.phone,

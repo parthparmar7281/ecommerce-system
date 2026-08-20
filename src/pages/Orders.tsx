@@ -91,7 +91,7 @@ const Orders: React.FC = () => {
             }
             orderMap[oId].items.push(item);
         });
-
+        console.log("Grouped Seller Orders:", orderMap);
         const groupedSellerOrders = Object.values(orderMap);
 
         return (
